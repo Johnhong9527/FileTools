@@ -3,7 +3,7 @@
     <div class="back">
       <div @click="back">back</div>
     </div>
-    <div @click="test" class="btn">filePath</div>
+    <div @click="play" class="btn">filePath</div>
     {{filePath}}
     <br>
     {{port}}
@@ -11,7 +11,7 @@
       <video
         v-if="port"
         id="my-player"
-        class="video-js"
+        class="video-js vjs-theme-city"
         controls
         preload="auto"
         width="640"
@@ -40,29 +40,29 @@
       };
     },
     created() {
-      ipcRenderer.send('getFilePath', this.$route.query.filePath);
-      ipcRenderer.on('getPort', (event, port) => {
-        this.port = port;
-      });
       this.filePath = this.$route.query.filePath;
-      console.log('this.port', this.port);
-    },
-    mounted() {
-      console.log(43, this);
-      console.log(this.$route);
-      // this.filePath = encodeURI(`file://${this.$route.query.filePath}`);
-      // const myPlayer = videojs('my-player'); // video 标签中的ID
-      // myPlayer.ready(() => {
-      //   myPlayer.play();// 调用播放函数
-      // });
+      this.$nextTick(() => {
+        this.play();
+      });
     },
     methods: {
-      test() {
-
+      play() {
+        ipcRenderer.send('getFilePath', this.$route.query.filePath);
+        ipcRenderer.on('getPort', (event, port) => {
+          this.port = port;
+        });
+        // eslint-disable-next-line new-cap
+        const myPlayer = new videojs('my-player'); // video 标签中的ID
+        myPlayer.ready(() => {
+          myPlayer.play();// 调用播放函数
+        });
       },
       back() {
-        this.$router.go(-1);
+        this.$router.push({ path: '/' });
       },
+    },
+    // 销毁组件
+    beforeDestroy() {
     },
   };
 </script>
@@ -70,6 +70,7 @@
 
 <style lang="less" scoped>
   @import "video-js.min.css";
+  @import "../assets/theme-city.css";
 
   .btn {
     cursor: pointer;

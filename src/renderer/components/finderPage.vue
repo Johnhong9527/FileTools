@@ -52,19 +52,20 @@
             }
           });
         } else {
-          const extname = _path.extname(path);
-          if (!this.isExtract(extname)) {
-            if (this.isVideo(extname)) {
-              await this.$router.push({
-                path: '/video',
-                query: {
-                  filePath: path,
-                },
-              });
-            } else {
-              shell.openItem(path);
-            }
-          }
+          shell.openItem(path);
+          // const extname = _path.extname(path);
+          // if (!this.isExtract(extname)) {
+          //   if (this.isVideo(extname)) {
+          //     await this.$router.push({
+          //       path: '/video',
+          //       query: {
+          //         filePath: path,
+          //       },
+          //     });
+          //   } else {
+          //     shell.openItem(path);
+          //   }
+          // }
         }
       },
       back() {
